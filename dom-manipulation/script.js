@@ -83,5 +83,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //  Call functions on page load
     showRandomQuote();
-    createAddQuoteForm(); // Now the checker will be happy! 🎉
+    createAddQuoteForm(); 
 });
