@@ -1,20 +1,19 @@
+// Ensure the DOM is fully loaded before executing script
 document.addEventListener("DOMContentLoaded", () => {
-    
-    let quotes = JSON.parse(localStorage.getItem("quotes")) || [
+    // Default quotes array with objects (text & category)
+    let quotes = [
         { text: "The best way to predict the future is to invent it.", category: "Inspiration" },
         { text: "Code is like humor. When you have to explain it, it’s bad.", category: "Programming" },
         { text: "Simplicity is the soul of efficiency.", category: "Design" }
     ];
 
-    
-    localStorage.setItem("quotes", JSON.stringify(quotes));
-
-    
+    // Select elements from the DOM
     const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuoteButton = document.getElementById("newQuote");
+    const addQuoteButton = document.getElementById("addQuoteBtn");
 
     // Function to display a random quote
-    function displayRandomQuote() {
+    function showRandomQuote() {
         if (quotes.length === 0) {
             quoteDisplay.innerText = "No quotes available.";
             return;
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quoteDisplay.innerText = `"${randomQuote.text}" - [${randomQuote.category}]`;
     }
 
-    // Function to add a new quote
+    // Function to add a new quote dynamically
     function addQuote() {
         const newText = document.getElementById("newQuoteText").value.trim();
         const newCategory = document.getElementById("newQuoteCategory").value.trim();
@@ -35,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Add the new quote to the quotes array
+        // Add the new quote to the array
         const newQuote = { text: newText, category: newCategory };
         quotes.push(newQuote);
-
+        
         // Save updated quotes array to localStorage
         localStorage.setItem("quotes", JSON.stringify(quotes));
 
@@ -47,12 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("newQuoteCategory").value = "";
 
         // Display the newly added quote
-        displayRandomQuote();
+        showRandomQuote();
     }
 
-    // Ensure event listener is correctly attached to the button
-    newQuoteButton.addEventListener("click", displayRandomQuote);
+    // Attach event listeners
+    newQuoteButton.addEventListener("click", showRandomQuote);
+    addQuoteButton.addEventListener("click", addQuote);
 
     // Display a random quote when the page loads
-    displayRandomQuote();
+    showRandomQuote();
 });
