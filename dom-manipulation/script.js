@@ -26,17 +26,17 @@ document.addEventListener("DOMContentLoaded", function () {
     function filterQuotes() {
         const selectedCategory = categoryFilter.value;
         localStorage.setItem("selectedCategory", selectedCategory);
-
-        let filteredQuotes = selectedCategory === "all" 
-            ? quotes 
+    
+        let filteredQuotes = selectedCategory === "all"
+            ? quotes
             : quotes.filter(q => q.category === selectedCategory);
-
+    
         if (filteredQuotes.length === 0) {
-            quoteDisplay.innerHTML = "No quotes available for this category.";
+            quoteDisplay.textContent = "No quotes available for this category.";
         } else {
             const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
             const randomQuote = filteredQuotes[randomIndex];
-            quoteDisplay.innerHTML = `"${randomQuote.text}" - <strong>[${randomQuote.category}]</strong>`;
+            quoteDisplay.textContent = `"${randomQuote.text}" - [${randomQuote.category}]`;
             sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
         }
     }
