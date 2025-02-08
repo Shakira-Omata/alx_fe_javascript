@@ -7,10 +7,16 @@
 </head>
 <body>
     <h1>Dynamic Quote Generator</h1>
+    
     <div id="quoteDisplay"></div>
     <button id="newQuote">Show New Quote</button>
 
-    <!-- Add Quote Form -->
+    <!--  "Export Quotes" Button -->
+    <button id="exportQuotes">Export Quotes</button>
+
+    <!--  "Import Quotes" Input -->
+    <input type="file" id="importFile" accept=".json" />
+
     <div>
         <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
         <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
@@ -20,3 +26,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
