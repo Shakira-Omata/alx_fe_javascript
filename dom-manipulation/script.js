@@ -5,9 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "Simplicity is the soul of efficiency.", category: "Design" }
     ];
 
-    // Save to localStorage (optional)
-    localStorage.setItem("quotes", JSON.stringify(quotes));
-
     // Select elements
     const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuoteButton = document.getElementById("newQuote");
