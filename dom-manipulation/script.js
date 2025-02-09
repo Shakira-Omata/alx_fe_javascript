@@ -4,6 +4,53 @@ let quotes = JSON.parse(localStorage.getItem("quotes")) || [
     { text: "In the middle of every difficulty lies opportunity.", category: "Inspiration" }
 ];
 
+const API_URL = "https://jsonplaceholder.typicode.com/posts"; // Mock API URL
+
+// Fetch quotes from the server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        if (data.length) {
+            const serverQuotes = data.map(item => ({ text: item.title, category: "General" }));
+            resolveConflicts(serverQuotes);
+        }
+    } catch (error) {
+        console.error("Error fetching quotes from server:", error);
+    }
+}
+
+// Resolve conflicts: Keep unique quotes and update local storage
+function resolveConflicts(serverQuotes) {
+    const allQuotes = [...quotes, ...serverQuotes];
+    const uniqueQuotes = allQuotes.filter((q, index, self) =>
+        index === self.findIndex(t => t.text === q.text)
+    );
+
+    if (uniqueQuotes.length !== quotes.length) {
+        quotes = uniqueQuotes;
+        saveQuotes();
+        populateCategories();
+        notifyUser("Quotes updated from the server!");
+    }
+}
+
+// Sync local quotes with the server
+async function syncQuotes() {
+    try {
+        for (let quote of quotes) {
+            await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify(quote),
+                headers: { "Content-Type": "application/json" }
+            });
+        }
+    } catch (error) {
+        console.error("Error syncing quotes to server:", error);
+    }
+}
+
 // Display a random quote
 function displayRandomQuote() {
     if (quotes.length === 0) return;
@@ -28,6 +75,7 @@ function addQuote() {
     populateCategories();
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
+    syncQuotes();
 }
 
 // Save quotes to local storage
@@ -94,36 +142,23 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
-// Fetch quotes from the server
-async function syncWithServer() {
-    try {
-        const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-        const data = await response.json();
+// Notify user of updates
+function notifyUser(message) {
+    const notification = document.createElement("div");
+    notification.textContent = message;
+    notification.style.cssText = "position: fixed; top: 10px; right: 10px; background: #28a745; color: white; padding: 10px; border-radius: 5px;";
+    document.body.appendChild(notification);
 
-        if (data.length) {
-            const serverQuotes = data.map(item => ({ text: item.title, category: "General" }));
-            const mergedQuotes = [...quotes, ...serverQuotes].filter((q, index, self) =>
-                index === self.findIndex(t => t.text === q.text)
-            );
-
-            if (mergedQuotes.length !== quotes.length) {
-                quotes = mergedQuotes;
-                saveQuotes();
-                populateCategories();
-                alert("New quotes synced from the server!");
-            }
-        }
-    } catch (error) {
-        console.error("Error syncing with server:", error);
-    }
+    setTimeout(() => notification.remove(), 3000);
 }
 
 // Auto-sync with server every 10 seconds
-setInterval(syncWithServer, 10000);
+setInterval(fetchQuotesFromServer, 10000);
 
 // Initialize the application
 window.onload = function () {
     displayRandomQuote();
     populateCategories();
     restoreCategoryFilter();
+    fetchQuotesFromServer();
 };
