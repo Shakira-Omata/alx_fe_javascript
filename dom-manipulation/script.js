@@ -37,6 +37,7 @@ function resolveConflicts(serverQuotes) {
 }
 
 // Sync local quotes with the server
+// Sync local quotes with the server
 async function syncQuotes() {
     try {
         for (let quote of quotes) {
@@ -46,10 +47,13 @@ async function syncQuotes() {
                 headers: { "Content-Type": "application/json" }
             });
         }
+        notifyUser("Quotes synced with server!"); // 
+        console.log("Quotes synced with server!"); 
     } catch (error) {
         console.error("Error syncing quotes to server:", error);
     }
 }
+
 
 // Display a random quote
 function displayRandomQuote() {
