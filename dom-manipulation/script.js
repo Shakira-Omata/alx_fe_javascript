@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Select elements
     const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuoteButton = document.getElementById("newQuote");
+    const exportButton = document.getElementById("exportQuotes");
+    const importInput = document.getElementById("importFile");
 
     //  Function to display a random quote
     function showRandomQuote() {
